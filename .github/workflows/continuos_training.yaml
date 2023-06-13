@@ -1,5 +1,5 @@
-name: Continuos Training
-on: 
+name: Continuous Training
+on:
   push:
     branches:
       - workflow_continuos_trainning
@@ -12,41 +12,41 @@ on:
         required: false
         default: running CT
 jobs:
-  continuos-training:
+  continuous-training:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: Train model
-        env:
+        env: 
           SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
         run: |
-          pip3 install virtualenv
-          virtualenv venv
-          source venv/bin/activate
-          pip install -r src/requirements.txt
-          export GOOGLE_APPLICATION_CREDENTIALS=$(python utilities/setter.py)
-          dvc pull model/model.pkl.dvc -r model-track
-          dvc unprotect model/model.pkl
-          dvc repro -f
-          echo "Training Complete"
-          dvc add model/model.pkl -r model-track
-          dvc push model/model.pkl.dvc -r model-track
+           pip3 install virtualenv
+           virtualenv venv
+           source venv/bin/activate
+           pip install -r src/requirements.txt
+           export GOOGLE_APPLICATION_CREDENTIALS=$(python utilities/setter.py)
+           dvc pull model/model.pkl.dvc -r model-tracker
+           dvc unprotect model/model.pkl
+           dvc repro -f 
+           echo "Training Completed"
+           dvc add model/model.pkl -r model-tracker --to-remote
+           dvc push model/model.pkl.dvc -r model-tracker
       - name: Commit .dvc file changes
         run: |
-          git config --local user.email "jcasjar@gmail.com"
-          git config --local user.name "github-actions[bot-MM]"
+          git config --local user.email "ing.gersonp@gmail.com"
+          git config --local user.name "github-actions[bot]"
           git add model/model.pkl.dvc
-          git commit -m 'Updating model serialization'
+          git commit -m "Updating model serialization"
       - uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ github.ref }}
       - uses: iterative/setup-cml@v1
       - name: Push metrics
         env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cat report.txt >> report.md
+          cat report.txt >> report.md 
           cml-publish prediction_behavior.png --md >> report.md
           cml-send-comment report.md
