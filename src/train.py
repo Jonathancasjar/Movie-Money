@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 logger.info('Loading Data...')
-data = pd.read_csv('/home/jonathancasjar/Documents/Platzi/DS_and_AI_School/Movie-Money/dataset/full_data.csv')
+data = pd.read_csv('Dataset/full_data.csv')
 
 logger.info('Loading model...')
 model = Pipeline([
