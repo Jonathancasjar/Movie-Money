@@ -30,7 +30,7 @@ jobs:
           dvc unprotect model/model.pkl
           dvc repro -f
           echo "Training Complete"
-          dvc add model/model.pkl -r model-track
+          dvc add model/model.pkl 
           dvc push model/model.pkl.dvc -r model-track
       - name: Commit .dvc file changes
         run: |
