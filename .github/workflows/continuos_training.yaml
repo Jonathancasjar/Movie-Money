@@ -1,10 +1,9 @@
 name: Continuos Training
-on: 
+on:
   push:
-    branches:
-      -workflow_continuos_training
+    branches: -workflow_continuos_training
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: "0 */6 * * *"
   workflow_dispatch:
     inputs:
       reason:
@@ -21,19 +20,6 @@ jobs:
         env:
           SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
         run: |
-<<<<<<< HEAD
-            pip3 install virtualenv
-            virtualenv venv
-            source venv/bin/activate
-            pip install -r src/requirements.txt
-            export GOOGLE_APPLICATION_CREDENTIALS=$(python utilities/setter.py)
-            dvc pull model/model.pkl.dvc -r model-track
-            dvc unprotect model/model.pkl
-            dvc repro -f
-            echo "Training Complete"
-            dvc add model/model.pkl -r model-track
-            dvc push model/model.pkl.dvc -r model-track
-=======
           pip3 install virtualenv
           virtualenv venv
           source venv/bin/activate
@@ -45,7 +31,6 @@ jobs:
           echo "Training Complete"
           dvc add model/model.pkl -r model-track
           dvc push model/model.pkl.dvc -r model-track
->>>>>>> beaa7e5d39c34b36e5e4ae45ed0d0c18b82a3cf7
       - name: Commit .dvc file changes
         run: |
           git config --local user.email "jcasjar@gmail.com"
@@ -54,13 +39,8 @@ jobs:
           git commit -m 'Updating model serialization'
       - uses: ad-m/github-push-action@master
         with:
-<<<<<<< HEAD
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            branch: ${{ github.ref }}
-=======
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
->>>>>>> beaa7e5d39c34b36e5e4ae45ed0d0c18b82a3cf7
       - uses: iterative/setup-cml@v1
       - name: Push metrics
         env:
