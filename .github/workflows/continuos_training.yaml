@@ -32,9 +32,6 @@ jobs:
           echo "Training Complete"
           dvc add model/model.pkl 
           dvc push model/model.pkl.dvc -r model-track
-          cat report.txt >> report.md
-          cml-publish prediction_behavior.png --md >> report.md
-          cml-send-comment report.md
       - name: Commit .dvc file changes
         run: |
           git config --local user.email "jcasjar@gmail.com"
